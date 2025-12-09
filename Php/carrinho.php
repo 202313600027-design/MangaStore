@@ -235,7 +235,7 @@ if (isset($_GET['del'])) {
             <a href="pagina_principal.php" style="margin-right: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
                 <i class="fas fa-arrow-left"></i> Continuar Comprando
             </a>
-            <a href="#" style="padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 5px;">
+            <a href="finalizar.php" style="padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 5px;">
                 <i class="fas fa-credit-card"></i> Finalizar Compra
             </a>
         </div>
