@@ -1,0 +1,175 @@
+    :root {
+        --primary-bg: #0f0f0f;
+        --secondary-bg: #1a1a1a;
+        --accent-color: #e53935;
+        --accent-hover: #c62828;
+        --success-color: #27ae60;
+        --success-hover: #219a52;
+        --text-primary: #ffffff;
+        --text-secondary: #b0b0b0;
+        --card-bg: #252525;
+        --border-color: #333;
+        --gradient: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: var(--primary-bg);
+        color: var(--text-primary);
+        min-height: 100vh;
+        background-color: var(--primary-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        
+    }
+
+    .container {
+        max-width: 480px;
+        width: 100%;
+        padding: 50px 40px;
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--border-color);
+        text-align: center;
+        margin: 40px auto;
+    }
+
+    .logo {
+        font-size: 2.8rem;
+        font-weight: 800;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        background: var(--secondary-bg);
+        color: var(--text-primary);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+        border-color: var(--accent-color);
+        transform: translateY(-2px);
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 35px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 16px 24px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: white;
+    }
+
+    .btn-cadastrar {
+        background: var(--accent-color);
+    }
+
+    .btn-cadastrar:hover {
+        background: var(--accent-hover);
+    }
+
+    .btn-entrar {
+        background: var(--success-color);
+    }
+
+    .btn-entrar:hover {
+        background: var(--success-hover);
+    }
+
+    .btn-voltar {
+        margin-top: 30px;
+        background: var(--accent-color);
+        padding: 14px 28px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        color: white;
+        transition: 0.3s;
+    }
+
+    .btn-voltar:hover {
+        background: var(--accent-hover);
+        transform: translateY(-3px);
+    }
+
+    .icon {
+        font-size: 80px;
+        margin-bottom: 25px;
+    }
+
+    .success-icon {
+        color: #27ae60;
+    }
+
+    .maintenance-icon {
+        color: #e53935;
+    }
+    .voltar {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 9999;
+    background-color: var(--accent-color);
+    padding: 10px 15px;
+    border-radius: 8px;
+    width: auto;
+    transition: 0.3s;
+}
+
+.voltar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.voltar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.voltar:hover {
+    background-color: var(--accent-hover);
+    }
+
+    

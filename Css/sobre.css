@@ -1,0 +1,237 @@
+
+.sobre-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.sobre-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.sobre-header h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.sobre-header p {
+    color: #666;
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.sobre-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    margin-bottom: 60px;
+}
+
+@media (max-width: 768px) {
+    .sobre-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sobre-text h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.sobre-text p {
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.sobre-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.valores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.valor-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.valor-card:hover {
+    transform: translateY(-5px);
+}
+
+.valor-icon {
+    font-size: 2.5rem;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+}
+
+.valor-card h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.valor-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.equipe-section {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid #eee;
+}
+
+.equipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.membro-card {
+    text-align: center;
+}
+
+.membro-foto {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: white;
+}
+
+.membro-card h4 {
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+}
+
+.membro-card p {
+    color: #666;
+    font-style: italic;
+}
+
+.contato-info {
+    background: #f9f9f9;
+    padding: 40px;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+
+.contato-info h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.contato-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.contato-icon {
+    font-size: 1.5rem;
+    color: #ff6b6b;
+    margin-right: 15px;
+    width: 30px;
+}
+
+/* CORES AJUSTADAS PARA PRETO */
+.contato-item strong {
+    color: #000 !important; /* PRETO */
+    font-weight: 600;
+}
+
+.contato-item div {
+    color: #000 !important; /* PRETO */
+}
+
+.voltar-btn {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 12px 30px;
+    background: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.voltar-btn:hover {
+    background: #45a049;
+}
+
+.voltar-btn i {
+    margin-right: 8px;
+}
+
+/* Estilos para o header específico da página sobre */
+nav ul li a.active {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* Menu suspenso */
+.menu-suspenso {
+    display: none;
+    position: absolute;
+    background: white;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-radius: 5px;
+    padding: 10px 0;
+}
+
+.menu-suspenso.mostrar {
+    display: block;
+}
+
+.item-suspenso {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.item-suspenso:hover {
+    background: #f5f5f5;
+}
+
+.item-suspenso i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.botao-sair {
+    color: #ff4444 !important;
+    border-top: 1px solid #eee;
+    margin-top: 5px;
+    padding-top: 15px;
+}
