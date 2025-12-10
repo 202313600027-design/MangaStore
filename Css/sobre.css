@@ -11,13 +11,13 @@
 }
 
 .sobre-header h1 {
-    color: #333;
+    color: #f40202;
     font-size: 2.5rem;
     margin-bottom: 20px;
 }
 
 .sobre-header p {
-    color: #666;
+    color: #cccccc;
     font-size: 1.2rem;
     max-width: 800px;
     margin: 0 auto;
@@ -30,6 +30,7 @@
     margin-bottom: 60px;
 }
 
+
 @media (max-width: 768px) {
     .sobre-content {
         grid-template-columns: 1fr;
@@ -37,7 +38,7 @@
 }
 
 .sobre-text h2 {
-    color: #333;
+    color: #f40202;
     margin-bottom: 20px;
     font-size: 1.8rem;
 }
@@ -123,7 +124,7 @@
 }
 
 .membro-card h4 {
-    color: #333;
+    color: #f40202;
     margin-bottom: 5px;
     font-size: 1.2rem;
 }

@@ -286,7 +286,7 @@ if (isset($_GET['del'])) {
                     <a href="#">Termos de Uso</a>
                     <a href="#">Política de Privacidade</a>
                 </div>
-                <p class="copyright">&copy; 2023 MangaStore. Todos os direitos reservados.</p>
+                <p class="copyright">&copy; 2025 MangaStore. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>

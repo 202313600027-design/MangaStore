@@ -24,10 +24,7 @@ if (isset($_SESSION['usuario'])) {
             <div class='header-content'>
                 <a href='pagina_principal.php' class='logo'>Manga<span>Store</span></a>
                 <nav>
-                    <ul>
-                        <li><a href='pagina_principal.php'>Home</a></li>
-                        <li><a href='carrinho.php'>Carrinho</a></li>
-                                                
+                    <ul>                      
                         <?php
                         if ($usuarioLogado) {
                             echo "<li class='menu-usuario'>
