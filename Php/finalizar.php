@@ -60,6 +60,10 @@ if (empty($itensCarrinho)) {
 }
 
 // Processar o pagamento quando o formulário for enviado (botão submit)
+$pedidoSucesso = false;
+$numeroPedido = '';
+$metodoPagamento = '';
+
 if (isset($aceito_termos)) {
     // Aqui você processaria o pagamento real
     $metodoPagamento = $metodo_pagamento ?? '';
@@ -72,12 +76,12 @@ if (isset($aceito_termos)) {
         $pedidoSucesso = true;
         $numeroPedido = 'PED' . date('Ymd') . rand(1000, 9999);
     } else {
-        echo "<script>alert('Você deve aceitar os termos e condições para finalizar a compra.');</script>";
+        $erroTermos = true;
     }
 }
-?>
 
-<!DOCTYPE html>
+// Iniciar o output com echo
+echo "<!DOCTYPE html>
 <html lang='pt-br'>
 <head>
     <meta charset='UTF-8'>
@@ -98,7 +102,7 @@ if (isset($aceito_termos)) {
                         <li class='menu-usuario'>
                             <a href='#' class='link-usuario' onclick='toggleDropdown()'>
                                 <i class='fas fa-user-circle icone-usuario'></i>
-                                <?php echo $usuarioLogado; ?>
+                                $usuarioLogado
                                 <i class='fas fa-chevron-down' style='font-size: 12px;'></i>
                             </a>
                             <div class='menu-suspenso' id='userDropdown'>
@@ -119,9 +123,10 @@ if (isset($aceito_termos)) {
         </div>
     </header>
 
-    <div class='checkout-container'>
-        <?php if (isset($pedidoSucesso) && $pedidoSucesso): ?>
-        
+    <div class='checkout-container'>";
+
+if ($pedidoSucesso) {
+    echo "
         <!-- Tela de confirmação de pedido -->
         <div class='pedido-confirmado'>
             <div class='confirmacao-icon'>
@@ -131,17 +136,20 @@ if (isset($aceito_termos)) {
             <div class='resumo-pedido'>
                 <h2><i class='fas fa-receipt'></i> Resumo do Pedido</h2>
                 <div class='info-pedido'>
-                    <p><strong>Número do Pedido:</strong> <?php echo $numeroPedido; ?></p>
-                    <p><strong>Data:</strong> <?php echo date('d/m/Y H:i'); ?></p>
-                    <p><strong>Valor Total:</strong> R$ <?php echo number_format($totalCarrinho, 2, ',', '.'); ?></p>
-                    <p><strong>Método de Pagamento:</strong> <?php echo $metodoPagamento; ?></p>
+                    <p><strong>Número do Pedido:</strong> $numeroPedido</p>
+                    <p><strong>Data:</strong> " . date('d/m/Y H:i') . "</p>
+                    <p><strong>Valor Total:</strong> R$ " . number_format($totalCarrinho, 2, ',', '.') . "</p>
+                    <p><strong>Método de Pagamento:</strong> $metodoPagamento</p>
                 </div>
                 
                 <h3>Itens do Pedido:</h3>
-                <ul class='itens-confirmacao'>
-                    <?php foreach ($itensCarrinho as $item): ?>
-                    <li><?php echo $item['nome']; ?> - <?php echo $item['quantidade']; ?>x - R$ <?php echo number_format($item['preco'], 2, ',', '.'); ?></li>
-                    <?php endforeach; ?>
+                <ul class='itens-confirmacao'>";
+                
+    foreach ($itensCarrinho as $item) {
+        echo "<li>" . $item['nome'] . " - " . $item['quantidade'] . "x - R$ " . number_format($item['preco'], 2, ',', '.') . "</li>";
+    }
+    
+    echo "
                 </ul>
                 
                 <div class='mensagem-agradecimento'>
@@ -161,10 +169,14 @@ if (isset($aceito_termos)) {
                     </button>
                 </div>
             </div>
-        </div>
-        
-        <?php else: ?>
-        
+        </div>";
+} else {
+    // Verificar se há erro nos termos
+    if (isset($erroTermos)) {
+        echo "<script>alert('Você deve aceitar os termos e condições para finalizar a compra.');</script>";
+    }
+    
+    echo "
         <!-- Formulário de Checkout -->
         <div class='checkout-header'>
             <h1><i class='fas fa-shopping-bag'></i> Finalizar Compra</h1>
@@ -199,34 +211,34 @@ if (isset($aceito_termos)) {
                             <div class='form-group'>
                                 <label for='cep'>CEP *</label>
                                 <div class='input-com-botao'>
-                                    <input type='text' id='cep' name='cep' placeholder='00000-000' required maxlength='9' value='<?php echo $cep ?? ''; ?>'>
+                                    <input type='text' id='cep' name='cep' placeholder='00000-000' required maxlength='9' value='" . ($cep ?? '') . "'>
                                 </div>
                             </div>
                             
                             <div class='form-duplo'>
                                 <div class='form-group'>
                                     <label for='rua'>Rua *</label>
-                                    <input type='text' id='rua' name='rua' placeholder='Nome da rua' required value='<?php echo $rua ?? ''; ?>'>
+                                    <input type='text' id='rua' name='rua' placeholder='Nome da rua' required value='" . ($rua ?? '') . "'>
                                 </div>
                                 <div class='form-group'>
                                     <label for='numero'>Número *</label>
-                                    <input type='text' id='numero' name='numero' placeholder='123' required value='<?php echo $numero ?? ''; ?>'>
+                                    <input type='text' id='numero' name='numero' placeholder='123' required value='" . ($numero ?? '') . "'>
                                 </div>
                             </div>
                             
                             <div class='form-group'>
                                 <label for='complemento'>Complemento</label>
-                                <input type='text' id='complemento' name='complemento' placeholder='Apartamento, bloco, etc.' value='<?php echo $complemento ?? ''; ?>'>
+                                <input type='text' id='complemento' name='complemento' placeholder='Apartamento, bloco, etc.' value='" . ($complemento ?? '') . "'>
                             </div>
                             
                             <div class='form-duplo'>
                                 <div class='form-group'>
                                     <label for='bairro'>Bairro *</label>
-                                    <input type='text' id='bairro' name='bairro' placeholder='Bairro' required value='<?php echo $bairro ?? ''; ?>'>
+                                    <input type='text' id='bairro' name='bairro' placeholder='Bairro' required value='" . ($bairro ?? '') . "'>
                                 </div>
                                 <div class='form-group'>
                                     <label for='cidade'>Cidade *</label>
-                                    <input type='text' id='cidade' name='cidade' placeholder='Cidade' required value='<?php echo $cidade ?? ''; ?>'>
+                                    <input type='text' id='cidade' name='cidade' placeholder='Cidade' required value='" . ($cidade ?? '') . "'>
                                 </div>
                             </div>
                             
@@ -234,28 +246,29 @@ if (isset($aceito_termos)) {
                                 <div class='form-group'>
                                     <label for='estado'>Estado *</label>
                                     <select id='estado' name='estado' required>
-                                        <option value=''>Selecione</option>
-                                        <?php
-                                        $estados = array(
-                                            'AC'=>'Acre', 'AL'=>'Alagoas', 'AP'=>'Amapá', 'AM'=>'Amazonas',
-                                            'BA'=>'Bahia', 'CE'=>'Ceará', 'DF'=>'Distrito Federal', 'ES'=>'Espírito Santo',
-                                            'GO'=>'Goiás', 'MA'=>'Maranhão', 'MT'=>'Mato Grosso', 'MS'=>'Mato Grosso do Sul',
-                                            'MG'=>'Minas Gerais', 'PA'=>'Pará', 'PB'=>'Paraíba', 'PR'=>'Paraná',
-                                            'PE'=>'Pernambuco', 'PI'=>'Piauí', 'RJ'=>'Rio de Janeiro', 'RN'=>'Rio Grande do Norte',
-                                            'RS'=>'Rio Grande do Sul', 'RO'=>'Rondônia', 'RR'=>'Roraima', 'SC'=>'Santa Catarina',
-                                            'SP'=>'São Paulo', 'SE'=>'Sergipe', 'TO'=>'Tocantins'
-                                        );
-                                        
-                                        foreach ($estados as $sigla => $nome) {
-                                            $selected = ($estado == $sigla) ? 'selected' : '';
-                                            echo "<option value='$sigla' $selected>$nome</option>";
-                                        }
-                                        ?>
+                                        <option value=''>Selecione</option>";
+    
+    $estados = array(
+        'AC'=>'Acre', 'AL'=>'Alagoas', 'AP'=>'Amapá', 'AM'=>'Amazonas',
+        'BA'=>'Bahia', 'CE'=>'Ceará', 'DF'=>'Distrito Federal', 'ES'=>'Espírito Santo',
+        'GO'=>'Goiás', 'MA'=>'Maranhão', 'MT'=>'Mato Grosso', 'MS'=>'Mato Grosso do Sul',
+        'MG'=>'Minas Gerais', 'PA'=>'Pará', 'PB'=>'Paraíba', 'PR'=>'Paraná',
+        'PE'=>'Pernambuco', 'PI'=>'Piauí', 'RJ'=>'Rio de Janeiro', 'RN'=>'Rio Grande do Norte',
+        'RS'=>'Rio Grande do Sul', 'RO'=>'Rondônia', 'RR'=>'Roraima', 'SC'=>'Santa Catarina',
+        'SP'=>'São Paulo', 'SE'=>'Sergipe', 'TO'=>'Tocantins'
+    );
+    
+    foreach ($estados as $sigla => $nome) {
+        $selected = (isset($estado) && $estado == $sigla) ? 'selected' : '';
+        echo "<option value='$sigla' $selected>$nome</option>";
+    }
+    
+    echo "
                                     </select>
                                 </div>
                                 <div class='form-group'>
                                     <label for='telefone'>Telefone *</label>
-                                    <input type='tel' id='telefone' name='telefone' placeholder='(11) 99999-9999' required value='<?php echo $telefone ?? ''; ?>'>
+                                    <input type='tel' id='telefone' name='telefone' placeholder='(11) 99999-9999' required value='" . ($telefone ?? '') . "'>
                                 </div>
                             </div>
                         </div>
@@ -266,7 +279,7 @@ if (isset($aceito_termos)) {
                             
                             <div class='opcoes-pagamento'>
                                 <div class='opcao-pagamento'>
-                                    <input type='radio' id='pagamento-pix' name='metodo_pagamento' value='PIX' <?php echo (($metodo_pagamento ?? 'PIX') == 'PIX') ? 'checked' : ''; ?>>
+                                    <input type='radio' id='pagamento-pix' name='metodo_pagamento' value='PIX' " . ((isset($metodo_pagamento) && $metodo_pagamento == 'PIX') || !isset($metodo_pagamento) ? 'checked' : '') . ">
                                     <label for='pagamento-pix'>
                                         <i class='fas fa-qrcode'></i>
                                         <span>PIX</span>
@@ -275,7 +288,7 @@ if (isset($aceito_termos)) {
                                 </div>
                                 
                                 <div class='opcao-pagamento'>
-                                    <input type='radio' id='pagamento-cartao' name='metodo_pagamento' value='Cartão de Crédito' <?php echo (($metodo_pagamento ?? '') == 'Cartão de Crédito') ? 'checked' : ''; ?>>
+                                    <input type='radio' id='pagamento-cartao' name='metodo_pagamento' value='Cartão de Crédito' " . ((isset($metodo_pagamento) && $metodo_pagamento == 'Cartão de Crédito') ? 'checked' : '') . ">
                                     <label for='pagamento-cartao'>
                                         <i class='fas fa-credit-card'></i>
                                         <span>Cartão de Crédito</span>
@@ -284,7 +297,7 @@ if (isset($aceito_termos)) {
                                 </div>
                                 
                                 <div class='opcao-pagamento'>
-                                    <input type='radio' id='pagamento-boleto' name='metodo_pagamento' value='Boleto' <?php echo (($metodo_pagamento ?? '') == 'Boleto') ? 'checked' : ''; ?>>
+                                    <input type='radio' id='pagamento-boleto' name='metodo_pagamento' value='Boleto' " . ((isset($metodo_pagamento) && $metodo_pagamento == 'Boleto') ? 'checked' : '') . ">
                                     <label for='pagamento-boleto'>
                                         <i class='fas fa-barcode'></i>
                                         <span>Boleto</span>
@@ -297,35 +310,36 @@ if (isset($aceito_termos)) {
                             <div class='campos-cartao' id='campos-cartao'>
                                 <div class='form-group'>
                                     <label for='nome_cartao'>Nome no Cartão *</label>
-                                    <input type='text' id='nome_cartao' name='nome_cartao' placeholder='Como está no cartão' value='<?php echo $nome_cartao ?? ''; ?>'>
+                                    <input type='text' id='nome_cartao' name='nome_cartao' placeholder='Como está no cartão' value='" . ($nome_cartao ?? '') . "'>
                                 </div>
                                 
                                 <div class='form-group'>
                                     <label for='numero_cartao'>Número do Cartão *</label>
-                                    <input type='text' id='numero_cartao' name='numero_cartao' placeholder='0000 0000 0000 0000' maxlength='19' value='<?php echo $numero_cartao ?? ''; ?>'>
+                                    <input type='text' id='numero_cartao' name='numero_cartao' placeholder='0000 0000 0000 0000' maxlength='19' value='" . ($numero_cartao ?? '') . "'>
                                 </div>
                                 
                                 <div class='form-duplo'>
                                     <div class='form-group'>
                                         <label for='validade_cartao'>Validade *</label>
-                                        <input type='text' id='validade_cartao' name='validade_cartao' placeholder='MM/AA' maxlength='5' value='<?php echo $validade_cartao ?? ''; ?>'>
+                                        <input type='text' id='validade_cartao' name='validade_cartao' placeholder='MM/AA' maxlength='5' value='" . ($validade_cartao ?? '') . "'>
                                     </div>
                                     <div class='form-group'>
                                         <label for='cvv_cartao'>CVV *</label>
-                                        <input type='text' id='cvv_cartao' name='cvv_cartao' placeholder='000' maxlength='3' value='<?php echo $cvv_cartao ?? ''; ?>'>
+                                        <input type='text' id='cvv_cartao' name='cvv_cartao' placeholder='000' maxlength='3' value='" . ($cvv_cartao ?? '') . "'>
                                     </div>
                                 </div>
                                 
                                 <div class='form-group'>
                                     <label for='parcelas'>Parcelas</label>
-                                    <select id='parcelas' name='parcelas'>
-                                        <?php
-                                        for ($i = 1; $i <= 12; $i++) {
-                                            $valorParcela = $totalCarrinho / $i;
-                                            $selected = (($parcelas ?? 1) == $i) ? 'selected' : '';
-                                            echo "<option value='$i' $selected>{$i}x de R$ " . number_format($valorParcela, 2, ',', '.') . "</option>";
-                                        }
-                                        ?>
+                                    <select id='parcelas' name='parcelas'>";
+    
+    for ($i = 1; $i <= 12; $i++) {
+        $valorParcela = $totalCarrinho / $i;
+        $selected = (isset($parcelas) && $parcelas == $i) ? 'selected' : '';
+        echo "<option value='$i' $selected>{$i}x de R$ " . number_format($valorParcela, 2, ',', '.') . "</option>";
+    }
+    
+    echo "
                                     </select>
                                 </div>
                             </div>
@@ -355,7 +369,7 @@ if (isset($aceito_termos)) {
                         
                         <!-- Termos e Condições -->
                         <div class='termos-checkout'>
-                            <input type='checkbox' id='aceito-termos' name='aceito_termos' required <?php echo ($aceito_termos ?? false) ? 'checked' : ''; ?>>
+                            <input type='checkbox' id='aceito-termos' name='aceito_termos' required " . ((isset($aceito_termos) && $aceito_termos) ? 'checked' : '') . ">
                             <label for='aceito-termos'>
                                 Li e concordo com os <a href='termos.php' target='_blank'>Termos de Uso</a> e 
                                 <a href='privacidade.php' target='_blank'>Política de Privacidade</a> da MangáStore
@@ -363,7 +377,7 @@ if (isset($aceito_termos)) {
                         </div>
                         
                         <button type='submit' class='btn-finalizar-compra'>
-                            <i class='fas fa-lock'></i> Finalizar Compra - R$ <?php echo number_format($totalCarrinho, 2, ',', '.'); ?>
+                            <i class='fas fa-lock'></i> Finalizar Compra - R$ " . number_format($totalCarrinho, 2, ',', '.') . "
                         </button>
                     </form>
                 </div>
@@ -373,19 +387,22 @@ if (isset($aceito_termos)) {
                     <div class='resumo-pedido'>
                         <h2><i class='fas fa-shopping-cart'></i> Resumo do Pedido</h2>
                         
-                        <div class='itens-resumo'>
-                            <?php foreach ($itensCarrinho as $item): ?>
-                            <div class='item-resumo'>
-                                <span class='item-nome'><?php echo $item['nome']; ?> (<?php echo $item['quantidade']; ?>x)</span>
-                                <span class='item-preco'>R$ <?php echo number_format($item['preco'] * $item['quantidade'], 2, ',', '.'); ?></span>
-                            </div>
-                            <?php endforeach; ?>
+                        <div class='itens-resumo'>";
+    
+    foreach ($itensCarrinho as $item) {
+        echo "<div class='item-resumo'>
+                <span class='item-nome'>" . $item['nome'] . " (" . $item['quantidade'] . "x)</span>
+                <span class='item-preco'>R$ " . number_format($item['preco'] * $item['quantidade'], 2, ',', '.') . "</span>
+              </div>";
+    }
+    
+    echo "
                         </div>
                         
                         <div class='totais-resumo'>
                             <div class='linha-total'>
                                 <span>Subtotal:</span>
-                                <span>R$ <?php echo number_format($totalCarrinho, 2, ',', '.'); ?></span>
+                                <span>R$ " . number_format($totalCarrinho, 2, ',', '.') . "</span>
                             </div>
                             <div class='linha-total'>
                                 <span>Frete:</span>
@@ -393,7 +410,7 @@ if (isset($aceito_termos)) {
                             </div>
                             <div class='linha-total total-final'>
                                 <span><strong>Total:</strong></span>
-                                <span><strong>R$ <?php echo number_format($totalCarrinho, 2, ',', '.'); ?></strong></span>
+                                <span><strong>R$ " . number_format($totalCarrinho, 2, ',', '.') . "</strong></span>
                             </div>
                         </div>
                         
@@ -423,8 +440,10 @@ if (isset($aceito_termos)) {
                     </div>
                 </div>
             </div>
-        </div>
-        <?php endif; ?>
+        </div>";
+}
+
+echo "
     </div>
 
     <!-- Footer -->
@@ -438,207 +457,208 @@ if (isset($aceito_termos)) {
                     <a href='termos.php'>Termos de Uso</a>
                     <a href='privacidade.php'>Política de Privacidade</a>
                 </div>
-                <p class='copyright'>&copy; <?php echo date('Y'); ?> MangaStore. Todos os direitos reservados.</p>
+                <p class='copyright'>&copy; " . date('Y') . " MangaStore. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
 
     <script>
-function toggleDropdown() {
-    event.preventDefault();
-    var dropdown = document.getElementById('userDropdown');
-    dropdown.classList.toggle('mostrar');
-}
-
-window.onclick = function(event) {
-    if (!event.target.matches('.link-usuario') && !event.target.closest('.link-usuario')) {
-        var dropdowns = document.getElementsByClassName('menu-suspenso');
-        for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('mostrar')) {
-                openDropdown.classList.remove('mostrar');
+    function toggleDropdown() {
+        event.preventDefault();
+        var dropdown = document.getElementById('userDropdown');
+        dropdown.classList.toggle('mostrar');
+    }
+    
+    window.onclick = function(event) {
+        if (!event.target.matches('.link-usuario') && !event.target.closest('.link-usuario')) {
+            var dropdowns = document.getElementsByClassName('menu-suspenso');
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('mostrar')) {
+                    openDropdown.classList.remove('mostrar');
+                }
             }
         }
     }
-}
-
-// Mostrar/ocultar campos de pagamento conforme método selecionado
-document.addEventListener('DOMContentLoaded', function() {
-    const metodoPix = document.getElementById('pagamento-pix');
-    const metodoCartao = document.getElementById('pagamento-cartao');
-    const metodoBoleto = document.getElementById('pagamento-boleto');
-    const camposCartao = document.getElementById('campos-cartao');
-    const instrucoesPix = document.getElementById('instrucoes-pix');
-    const instrucoesBoleto = document.getElementById('instrucoes-boleto');
     
-    function atualizarCamposPagamento() {
-        // Verificar qual método está selecionado
-        let metodoSelecionado = 'PIX'; // padrão
+    // Mostrar/ocultar campos de pagamento conforme método selecionado
+    document.addEventListener('DOMContentLoaded', function() {
+        const metodoPix = document.getElementById('pagamento-pix');
+        const metodoCartao = document.getElementById('pagamento-cartao');
+        const metodoBoleto = document.getElementById('pagamento-boleto');
+        const camposCartao = document.getElementById('campos-cartao');
+        const instrucoesPix = document.getElementById('instrucoes-pix');
+        const instrucoesBoleto = document.getElementById('instrucoes-boleto');
         
-        if (metodoPix && metodoPix.checked) metodoSelecionado = 'PIX';
-        if (metodoCartao && metodoCartao.checked) metodoSelecionado = 'Cartão de Crédito';
-        if (metodoBoleto && metodoBoleto.checked) metodoSelecionado = 'Boleto';
-        
-        // Mostrar campos do cartão apenas se cartão for selecionado
-        if (camposCartao) {
-            camposCartao.style.display = metodoSelecionado === 'Cartão de Crédito' ? 'block' : 'none';
+        function atualizarCamposPagamento() {
+            // Verificar qual método está selecionado
+            let metodoSelecionado = 'PIX'; // padrão
+            
+            if (metodoPix && metodoPix.checked) metodoSelecionado = 'PIX';
+            if (metodoCartao && metodoCartao.checked) metodoSelecionado = 'Cartão de Crédito';
+            if (metodoBoleto && metodoBoleto.checked) metodoSelecionado = 'Boleto';
+            
+            // Mostrar campos do cartão apenas se cartão for selecionado
+            if (camposCartao) {
+                camposCartao.style.display = metodoSelecionado === 'Cartão de Crédito' ? 'block' : 'none';
+            }
+            
+            // Mostrar instruções PIX apenas se PIX for selecionado
+            if (instrucoesPix) {
+                instrucoesPix.style.display = metodoSelecionado === 'PIX' ? 'block' : 'none';
+            }
+            
+            // Mostrar instruções boleto apenas se boleto for selecionado
+            if (instrucoesBoleto) {
+                instrucoesBoleto.style.display = metodoSelecionado === 'Boleto' ? 'block' : 'none';
+            }
+            
+            // Tornar campos do cartão obrigatórios apenas se cartão for selecionado
+            if (camposCartao) {
+                const camposObrigatorios = camposCartao.querySelectorAll('[name]');
+                camposObrigatorios.forEach(campo => {
+                    campo.required = metodoSelecionado === 'Cartão de Crédito';
+                });
+            }
         }
         
-        // Mostrar instruções PIX apenas se PIX for selecionado
-        if (instrucoesPix) {
-            instrucoesPix.style.display = metodoSelecionado === 'PIX' ? 'block' : 'none';
-        }
+        // Adicionar eventos aos radio buttons
+        if (metodoPix) metodoPix.addEventListener('change', atualizarCamposPagamento);
+        if (metodoCartao) metodoCartao.addEventListener('change', atualizarCamposPagamento);
+        if (metodoBoleto) metodoBoleto.addEventListener('change', atualizarCamposPagamento);
         
-        // Mostrar instruções boleto apenas se boleto for selecionado
-        if (instrucoesBoleto) {
-            instrucoesBoleto.style.display = metodoSelecionado === 'Boleto' ? 'block' : 'none';
-        }
+        // Inicializar
+        atualizarCamposPagamento();
         
-        // Tornar campos do cartão obrigatórios apenas se cartão for selecionado
-        if (camposCartao) {
-            const camposObrigatorios = camposCartao.querySelectorAll('[name]');
-            camposObrigatorios.forEach(campo => {
-                campo.required = metodoSelecionado === 'Cartão de Crédito';
+        // Máscaras para os campos
+        const cepInput = document.getElementById('cep');
+        const telefoneInput = document.getElementById('telefone');
+        const numeroCartaoInput = document.getElementById('numero_cartao');
+        const validadeCartaoInput = document.getElementById('validade_cartao');
+        const cvvCartaoInput = document.getElementById('cvv_cartao');
+        
+        // Máscara para CEP
+        if (cepInput) {
+            cepInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 5) {
+                    value = value.substring(0,5) + '-' + value.substring(5,8);
+                }
+                e.target.value = value;
             });
         }
-    }
-    
-    // Adicionar eventos aos radio buttons
-    if (metodoPix) metodoPix.addEventListener('change', atualizarCamposPagamento);
-    if (metodoCartao) metodoCartao.addEventListener('change', atualizarCamposPagamento);
-    if (metodoBoleto) metodoBoleto.addEventListener('change', atualizarCamposPagamento);
-    
-    // Inicializar
-    atualizarCamposPagamento();
-    
-    // Máscaras para os campos
-    const cepInput = document.getElementById('cep');
-    const telefoneInput = document.getElementById('telefone');
-    const numeroCartaoInput = document.getElementById('numero_cartao');
-    const validadeCartaoInput = document.getElementById('validade_cartao');
-    const cvvCartaoInput = document.getElementById('cvv_cartao');
-    
-    // Máscara para CEP
-    if (cepInput) {
-        cepInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 5) {
-                value = value.substring(0,5) + '-' + value.substring(5,8);
-            }
-            e.target.value = value;
-        });
-    }
-    
-    // Máscara para telefone
-    if (telefoneInput) {
-        telefoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 2) {
-                value = '(' + value.substring(0,2) + ') ' + value.substring(2);
-            }
-            if (value.length > 10) {
-                value = value.substring(0,10) + '-' + value.substring(10,15);
-            }
-            e.target.value = value;
-        });
-    }
-    
-    // Máscara para número do cartão
-    if (numeroCartaoInput) {
-        numeroCartaoInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = value.substring(0,16);
-            value = value.replace(/(\d{4})/g, '$1 ').trim();
-            e.target.value = value;
-        });
-    }
-    
-    // Máscara para validade do cartão
-    if (validadeCartaoInput) {
-        validadeCartaoInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 2) {
-                value = value.substring(0,2) + '/' + value.substring(2,4);
-            }
-            e.target.value = value;
-        });
-    }
-    
-    // Máscara para CVV (apenas números, máximo 3)
-    if (cvvCartaoInput) {
-        cvvCartaoInput.addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').substring(0,3);
-        });
-    }
-    
-    // Formatar valor do cartão ao carregar a página
-    const parcelasSelect = document.getElementById('parcelas');
-    if (parcelasSelect) {
-        const valorTotal = <?php echo $totalCarrinho; ?>;
-        for (let i = 1; i <= 12; i++) {
-            if (i <= 4) continue; // Já temos até 4x
-            const option = document.createElement('option');
-            const valorParcela = valorTotal / i;
-            option.value = i;
-            option.textContent = `${i}x de R$ ${valorParcela.toFixed(2).replace('.', ',')}`;
-            parcelasSelect.appendChild(option);
+        
+        // Máscara para telefone
+        if (telefoneInput) {
+            telefoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 2) {
+                    value = '(' + value.substring(0,2) + ') ' + value.substring(2);
+                }
+                if (value.length > 10) {
+                    value = value.substring(0,10) + '-' + value.substring(10,15);
+                }
+                e.target.value = value;
+            });
         }
-    }
-    
-    // Validar formulário antes de enviar
-    const formCheckout = document.getElementById('form-checkout');
-    if (formCheckout) {
-        formCheckout.addEventListener('submit', function(e) {
-            // Verificar se os termos foram aceitos
-            const aceitoTermos = document.getElementById('aceito-termos');
-            if (!aceitoTermos || !aceitoTermos.checked) {
-                e.preventDefault();
-                alert('Você deve aceitar os termos e condições para finalizar a compra.');
-                return;
+        
+        // Máscara para número do cartão
+        if (numeroCartaoInput) {
+            numeroCartaoInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.substring(0,16);
+                value = value.replace(/(\d{4})/g, '$1 ').trim();
+                e.target.value = value;
+            });
+        }
+        
+        // Máscara para validade do cartão
+        if (validadeCartaoInput) {
+            validadeCartaoInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 2) {
+                    value = value.substring(0,2) + '/' + value.substring(2,4);
+                }
+                e.target.value = value;
+            });
+        }
+        
+        // Máscara para CVV (apenas números, máximo 3)
+        if (cvvCartaoInput) {
+            cvvCartaoInput.addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '').substring(0,3);
+            });
+        }
+        
+        // Formatar valor do cartão ao carregar a página
+        const parcelasSelect = document.getElementById('parcelas');
+        if (parcelasSelect) {
+            const valorTotal = $totalCarrinho;
+            for (let i = 1; i <= 12; i++) {
+                if (i <= 4) continue; // Já temos até 4x
+                const option = document.createElement('option');
+                const valorParcela = valorTotal / i;
+                option.value = i;
+                option.textContent = i + 'x de R$ ' + valorParcela.toFixed(2).replace('.', ',');
+                parcelasSelect.appendChild(option);
             }
-            
-            // Verificar método de pagamento selecionado
-            const metodoSelecionado = document.querySelector('input[name="metodo_pagamento"]:checked');
-            if (!metodoSelecionado) {
-                e.preventDefault();
-                alert('Por favor, selecione um método de pagamento.');
-                return;
-            }
-            
-            // Se for cartão, validar campos do cartão
-            if (metodoSelecionado.value === 'Cartão de Crédito') {
-                const nomeCartao = document.getElementById('nome_cartao');
-                const numeroCartao = document.getElementById('numero_cartao');
-                const validadeCartao = document.getElementById('validade_cartao');
-                const cvvCartao = document.getElementById('cvv_cartao');
-                
-                if (!nomeCartao || !nomeCartao.value.trim()) {
+        }
+        
+        // Validar formulário antes de enviar
+        const formCheckout = document.getElementById('form-checkout');
+        if (formCheckout) {
+            formCheckout.addEventListener('submit', function(e) {
+                // Verificar se os termos foram aceitos
+                const aceitoTermos = document.getElementById('aceito-termos');
+                if (!aceitoTermos || !aceitoTermos.checked) {
                     e.preventDefault();
-                    alert('Por favor, preencha o nome no cartão.');
+                    alert('Você deve aceitar os termos e condições para finalizar a compra.');
                     return;
                 }
                 
-                if (!numeroCartao || !numeroCartao.value.replace(/\s/g, '').match(/^\d{16}$/)) {
+                // Verificar método de pagamento selecionado
+                const metodoSelecionado = document.querySelector('input[name=\"metodo_pagamento\"]:checked');
+                if (!metodoSelecionado) {
                     e.preventDefault();
-                    alert('Por favor, preencha um número de cartão válido (16 dígitos).');
+                    alert('Por favor, selecione um método de pagamento.');
                     return;
                 }
                 
-                if (!validadeCartao || !validadeCartao.value.match(/^\d{2}\/\d{2}$/)) {
-                    e.preventDefault();
-                    alert('Por favor, preencha uma validade válida no formato MM/AA.');
-                    return;
+                // Se for cartão, validar campos do cartão
+                if (metodoSelecionado.value === 'Cartão de Crédito') {
+                    const nomeCartao = document.getElementById('nome_cartao');
+                    const numeroCartao = document.getElementById('numero_cartao');
+                    const validadeCartao = document.getElementById('validade_cartao');
+                    const cvvCartao = document.getElementById('cvv_cartao');
+                    
+                    if (!nomeCartao || !nomeCartao.value.trim()) {
+                        e.preventDefault();
+                        alert('Por favor, preencha o nome no cartão.');
+                        return;
+                    }
+                    
+                    if (!numeroCartao || !numeroCartao.value.replace(/\\s/g, '').match(/^\\d{16}$/)) {
+                        e.preventDefault();
+                        alert('Por favor, preencha um número de cartão válido (16 dígitos).');
+                        return;
+                    }
+                    
+                    if (!validadeCartao || !validadeCartao.value.match(/^\\d{2}\\/\\d{2}$/)) {
+                        e.preventDefault();
+                        alert('Por favor, preencha uma validade válida no formato MM/AA.');
+                        return;
+                    }
+                    
+                    if (!cvvCartao || !cvvCartao.value.match(/^\\d{3}$/)) {
+                        e.preventDefault();
+                        alert('Por favor, preencha um CVV válido (3 dígitos).');
+                        return;
+                    }
                 }
-                
-                if (!cvvCartao || !cvvCartao.value.match(/^\d{3}$/)) {
-                    e.preventDefault();
-                    alert('Por favor, preencha um CVV válido (3 dígitos).');
-                    return;
-                }
-            }
-        });
-    }
-});
-</script>
+            });
+        }
+    });
+    </script>
 </body>
-</html>
+</html>";
+?>
