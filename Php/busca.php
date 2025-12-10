@@ -2,6 +2,7 @@
 session_start();
 include 'DLL.php';
 
+
 if (isset($_SESSION['usuario'])) {
     $usuarioLogado = $_SESSION['usuario'];
 } else {
